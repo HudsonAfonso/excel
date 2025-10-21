@@ -1,12 +1,12 @@
-part of excel;
+part of '../excel.dart';
 
 Excel _newExcel(Archive archive) {
   // Lookup at file format
   String? format;
 
-  var mimetype = archive.findFile('mimetype');
+  final mimetype = archive.findFile('mimetype');
   if (mimetype == null) {
-    var xl = archive.findFile('xl/workbook.xml');
+    final xl = archive.findFile('xl/workbook.xml');
     if (xl != null) {
       format = _spreasheetXlsx;
     }
@@ -16,8 +16,7 @@ Excel _newExcel(Archive archive) {
     case _spreasheetXlsx:
       return Excel._(archive);
     default:
-      throw UnsupportedError(
-          'Excel format unsupported. Only .xlsx files are supported');
+      throw UnsupportedError('Excel format unsupported. Only .xlsx files are supported');
   }
 }
 
@@ -44,15 +43,15 @@ class Excel {
   final NumFormatMaintainer _numFormats = NumFormatMaintainer();
   List<_BorderSet> _borderSetList = [];
 
-  _SharedStringsMaintainer _sharedStrings = _SharedStringsMaintainer._();
+  final _SharedStringsMaintainer _sharedStrings = _SharedStringsMaintainer._();
 
   String _stylesTarget = '';
   String _sharedStringsTarget = '';
   String get _absSharedStringsTarget {
-    if (_sharedStringsTarget.isNotEmpty && _sharedStringsTarget[0] == "/") {
+    if (_sharedStringsTarget.isNotEmpty && _sharedStringsTarget[0] == '/') {
       return _sharedStringsTarget.substring(1);
     }
-    return "xl/${_sharedStringsTarget}";
+    return 'xl/$_sharedStringsTarget';
   }
 
   String? _defaultSheet;
@@ -64,7 +63,7 @@ class Excel {
   }
 
   factory Excel.createExcel() {
-    return Excel.decodeBytes(Base64Decoder().convert(_newSheet));
+    return Excel.decodeBytes(const Base64Decoder().convert(_newSheet));
   }
 
   factory Excel.decodeBytes(List<int> data) {
@@ -72,8 +71,7 @@ class Excel {
     try {
       archive = ZipDecoder().decodeBytes(data);
     } catch (e) {
-      throw UnsupportedError(
-          'Excel format unsupported. Only .xlsx files are supported');
+      throw UnsupportedError('Excel format unsupported. Only .xlsx files are supported');
     }
     return _newExcel(archive);
   }
@@ -86,10 +84,10 @@ class Excel {
   ///It will return `tables` as map in order to mimic the previous versions reading the data.
   ///
   Map<String, Sheet> get tables {
-    if (this._sheetMap.isEmpty) {
-      _damagedExcel(text: "Corrupted Excel file.");
+    if (_sheetMap.isEmpty) {
+      _damagedExcel(text: 'Corrupted Excel file.');
     }
-    return Map<String, Sheet>.from(this._sheetMap);
+    return Map<String, Sheet>.from(_sheetMap);
   }
 
   ///
@@ -116,7 +114,7 @@ class Excel {
   ///
   ///Newly created sheet with name = `sheet` will have seperate reference and will not be linked to sheetObject.
   ///
-  operator []=(String sheet, Sheet sheetObject) {
+  void operator []=(String sheet, Sheet sheetObject) {
     _availSheet(sheet);
 
     _sheetMap[sheet] = Sheet._clone(this, sheet, sheetObject);
@@ -136,8 +134,7 @@ class Excel {
       _sheetMap[sheet1] = _sheetMap[existingSheetObject.sheetName]!;
 
       if (_cellStyleReferenced[existingSheetObject.sheetName] != null) {
-        _cellStyleReferenced[sheet1] = Map<String, int>.from(
-            _cellStyleReferenced[existingSheetObject.sheetName]!);
+        _cellStyleReferenced[sheet1] = Map<String, int>.from(_cellStyleReferenced[existingSheetObject.sheetName]!);
       }
     }
   }
@@ -167,8 +164,7 @@ class Excel {
       this[toSheet] = this[fromSheet];
     }
     if (_cellStyleReferenced[fromSheet] != null) {
-      _cellStyleReferenced[toSheet] =
-          Map<String, int>.from(_cellStyleReferenced[fromSheet]!);
+      _cellStyleReferenced[toSheet] = Map<String, int>.from(_cellStyleReferenced[fromSheet]!);
     }
   }
 
@@ -233,24 +229,14 @@ class Excel {
     ///
     /// remove from `_xmlSheetId`.
     if (_xmlSheetId[sheet] != null) {
-      String sheetId1 =
-              "worksheets" + _xmlSheetId[sheet]!.split('worksheets')[1],
-          sheetId2 = _xmlSheetId[sheet]!;
+      final sheetId1 = 'worksheets${_xmlSheetId[sheet]!.split('worksheets')[1]}', sheetId2 = _xmlSheetId[sheet]!;
 
-      _xmlFiles['xl/_rels/workbook.xml.rels']
-          ?.rootElement
-          .children
-          .removeWhere((_sheetName) {
-        return _sheetName.getAttribute('Target') != null &&
-            _sheetName.getAttribute('Target') == sheetId1;
+      _xmlFiles['xl/_rels/workbook.xml.rels']?.rootElement.children.removeWhere((sheetName) {
+        return sheetName.getAttribute('Target') != null && sheetName.getAttribute('Target') == sheetId1;
       });
 
-      _xmlFiles['[Content_Types].xml']
-          ?.rootElement
-          .children
-          .removeWhere((_sheetName) {
-        return _sheetName.getAttribute('PartName') != null &&
-            _sheetName.getAttribute('PartName') == '/' + sheetId2;
+      _xmlFiles['[Content_Types].xml']?.rootElement.children.removeWhere((sheetName) {
+        return sheetName.getAttribute('PartName') != null && sheetName.getAttribute('PartName') == '/$sheetId2';
       });
 
       ///
@@ -282,13 +268,8 @@ class Excel {
       ///
       /// Remove from `xl/workbook.xml`
       ///
-      _xmlFiles['xl/workbook.xml']
-          ?.findAllElements('sheets')
-          .first
-          .children
-          .removeWhere((element) {
-        return element.getAttribute('name') != null &&
-            element.getAttribute('name').toString() == sheet;
+      _xmlFiles['xl/workbook.xml']?.findAllElements('sheets').first.children.removeWhere((element) {
+        return element.getAttribute('name') != null && element.getAttribute('name').toString() == sheet;
       });
 
       _sheets.remove(sheet);
@@ -304,8 +285,8 @@ class Excel {
   ///
   ///It will start setting the edited values of `sheets` into the `files` and then `exports the file`.
   ///
-  List<int>? encode() {
-    Save s = Save._(this, parser);
+  Future<List<int>?> encode() async {
+    final s = Save._(this, parser);
     return s._save();
   }
 
@@ -330,9 +311,9 @@ class Excel {
   ///   ..writeAsBytesSync(fileBytes);
   ///
   ///```
-  List<int>? save({String fileName = 'FlutterExcel.xlsx'}) {
-    Save s = Save._(this, parser);
-    var onValue = s._save();
+  Future<List<int>?> save({String fileName = 'FlutterExcel.xlsx'}) async {
+    final s = Save._(this, parser);
+    final onValue = await s._save();
     return helper.SavingHelper.saveFile(onValue, fileName);
   }
 
@@ -343,7 +324,7 @@ class Excel {
     if (_defaultSheet != null) {
       return _defaultSheet;
     } else {
-      String? re = _getDefaultSheet();
+      final re = _getDefaultSheet();
       return re;
     }
   }
@@ -352,20 +333,18 @@ class Excel {
   ///Internal function which returns the defaultSheet-Name by reading from `workbook.xml`
   ///
   String? _getDefaultSheet() {
-    Iterable<XmlElement>? elements =
-        _xmlFiles['xl/workbook.xml']?.findAllElements('sheet');
-    XmlElement? _sheet;
+    final elements = _xmlFiles['xl/workbook.xml']?.findAllElements('sheet');
+    XmlElement? sheet;
     if (elements?.isNotEmpty ?? false) {
-      _sheet = elements?.first;
+      sheet = elements?.first;
     }
 
-    if (_sheet != null) {
-      var defaultSheet = _sheet.getAttribute('name');
+    if (sheet != null) {
+      final defaultSheet = sheet.getAttribute('name');
       if (defaultSheet != null) {
         return defaultSheet;
       } else {
-        _damagedExcel(
-            text: 'Excel sheet corrupted!! Try creating new excel file.');
+        _damagedExcel(text: 'Excel sheet corrupted!! Try creating new excel file.');
       }
     }
     return null;
@@ -440,7 +419,7 @@ class Excel {
       return;
     }
     _availSheet(sheet);
-    int targetRow = _sheetMap[sheet]!.maxRows;
+    final targetRow = _sheetMap[sheet]!.maxRows;
     insertRowIterables(sheet, row, targetRow);
   }
 
@@ -451,19 +430,27 @@ class Excel {
   ///
   ///[startingColumn] tells from where we should start putting the [row] iterables
   ///
-  ///[overwriteMergedCells] when set to [true] will over-write mergedCell and does not jumps to next unqiue cell.
+  ///[overwriteMergedCells] when set to true will over-write mergedCell and does not jumps to next unqiue cell.
   ///
-  ///[overwriteMergedCells] when set to [false] puts the cell value to next unique cell available by putting the value in merged cells only once and jumps to next unique cell.
+  ///[overwriteMergedCells] when set to false puts the cell value to next unique cell available by putting the value in merged cells only once and jumps to next unique cell.
   ///
-  void insertRowIterables(String sheet, List<CellValue?> row, int rowIndex,
-      {int startingColumn = 0, bool overwriteMergedCells = true}) {
+  void insertRowIterables(
+    String sheet,
+    List<CellValue?> row,
+    int rowIndex, {
+    int startingColumn = 0,
+    bool overwriteMergedCells = true,
+  }) {
     if (rowIndex < 0) {
       return;
     }
     _availSheet(sheet);
-    _sheetMap['$sheet']!.insertRowIterables(row, rowIndex,
-        startingColumn: startingColumn,
-        overwriteMergedCells: overwriteMergedCells);
+    _sheetMap[sheet]!.insertRowIterables(
+      row,
+      rowIndex,
+      startingColumn: startingColumn,
+      overwriteMergedCells: overwriteMergedCells,
+    );
   }
 
   ///
@@ -486,16 +473,20 @@ class Excel {
   ///
   ///Other `options` are used to `narrow down` the `starting and ending ranges of cells`.
   ///
-  int findAndReplace(String sheet, Pattern source, dynamic target,
-      {int first = -1,
-      int startingRow = -1,
-      int endingRow = -1,
-      int startingColumn = -1,
-      int endingColumn = -1}) {
-    int replaceCount = 0;
+  int findAndReplace(
+    String sheet,
+    Pattern source,
+    dynamic target, {
+    int first = -1,
+    int startingRow = -1,
+    int endingRow = -1,
+    int startingColumn = -1,
+    int endingColumn = -1,
+  }) {
+    final replaceCount = 0;
     if (_sheetMap[sheet] == null) return replaceCount;
 
-    _sheetMap['$sheet']!.findAndReplace(
+    _sheetMap[sheet]!.findAndReplace(
       source,
       target,
       first: first,
@@ -526,8 +517,7 @@ class Excel {
   ///
   ///If `sheet` does not exist then it will be automatically created.
   ///
-  void updateCell(String sheet, CellIndex cellIndex, CellValue? value,
-      {CellStyle? cellStyle}) {
+  void updateCell(String sheet, CellIndex cellIndex, CellValue? value, {CellStyle? cellStyle}) {
     _availSheet(sheet);
 
     _sheetMap[sheet]!.updateCell(cellIndex, value, cellStyle: cellStyle);
@@ -540,8 +530,7 @@ class Excel {
   ///
   ///If `sheet` does not exist then it will be automatically created.
   ///
-  void merge(String sheet, CellIndex start, CellIndex end,
-      {CellValue? customValue}) {
+  void merge(String sheet, CellIndex start, CellIndex end, {CellValue? customValue}) {
     _availSheet(sheet);
     _sheetMap[sheet]!.merge(start, end, customValue: customValue);
   }
@@ -550,8 +539,7 @@ class Excel {
   ///returns an Iterable of `cell-Id` for the previously merged cell-Ids.
   ///
   List<String> getMergedCells(String sheet) {
-    return List<String>.from(
-        _sheetMap[sheet] != null ? _sheetMap[sheet]!.spannedItems : <String>[]);
+    return List<String>.from(_sheetMap[sheet] != null ? _sheetMap[sheet]!.spannedItems : <String>[]);
   }
 
   ///

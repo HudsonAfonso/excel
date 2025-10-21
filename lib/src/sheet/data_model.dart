@@ -1,4 +1,4 @@
-part of excel;
+part of '../../excel.dart';
 
 // ignore: must_be_immutable
 class Data extends Equatable {
@@ -13,13 +13,13 @@ class Data extends Equatable {
   ///It will clone the object by changing the `this` reference of previous DataObject and putting `new this` reference, with copying the values too
   ///
   Data._clone(Sheet sheet, Data dataObject)
-      : this._(
-          sheet,
-          dataObject._rowIndex,
-          dataObject.columnIndex,
-          value: dataObject._value,
-          cellStyleVal: dataObject._cellStyle,
-        );
+    : this._(
+        sheet,
+        dataObject._rowIndex,
+        dataObject.columnIndex,
+        value: dataObject._value,
+        cellStyleVal: dataObject._cellStyle,
+      );
 
   ///
   ///Initializes the new `Data Object`
@@ -32,12 +32,12 @@ class Data extends Equatable {
     NumFormat? numberFormat,
     CellStyle? cellStyleVal,
     bool isFormulaVal = false,
-  })  : _sheet = sheet,
-        _value = value,
-        _cellStyle = cellStyleVal,
-        _sheetName = sheet.sheetName,
-        _rowIndex = row,
-        _columnIndex = column;
+  }) : _sheet = sheet,
+       _value = value,
+       _cellStyle = cellStyleVal,
+       _sheetName = sheet.sheetName,
+       _rowIndex = row,
+       _columnIndex = column;
 
   /// returns the newData object when called from Sheet Class
   static Data newData(Sheet sheet, int row, int column) {
@@ -61,8 +61,7 @@ class Data extends Equatable {
 
   /// returns the string based cellId as A1, A2 or Z5
   CellIndex get cellIndex {
-    return CellIndex.indexByColumnRow(
-        columnIndex: _columnIndex, rowIndex: _rowIndex);
+    return CellIndex.indexByColumnRow(columnIndex: _columnIndex, rowIndex: _rowIndex);
   }
 
   /// Helps to set the formula
@@ -92,19 +91,13 @@ class Data extends Equatable {
   }
 
   /// sets the user defined CellStyle in this current cell
-  set cellStyle(CellStyle? _) {
+  set cellStyle(CellStyle? c) {
     _sheet._excel._styleChanges = true;
-    _cellStyle = _;
+    _cellStyle = c;
   }
 
   @override
-  List<Object?> get props => [
-        _value,
-        _columnIndex,
-        _rowIndex,
-        _cellStyle,
-        _sheetName,
-      ];
+  List<Object?> get props => [_value, _columnIndex, _rowIndex, _cellStyle, _sheetName];
 }
 
 sealed class CellValue {
@@ -125,7 +118,7 @@ class FormulaCellValue extends CellValue {
   int get hashCode => Object.hash(runtimeType, formula);
 
   @override
-  operator ==(Object other) {
+  bool operator ==(Object other) {
     return other is FormulaCellValue && other.formula == formula;
   }
 }
@@ -144,7 +137,7 @@ class IntCellValue extends CellValue {
   int get hashCode => Object.hash(runtimeType, value);
 
   @override
-  operator ==(Object other) {
+  bool operator ==(Object other) {
     return other is IntCellValue && other.value == value;
   }
 }
@@ -163,7 +156,7 @@ class DoubleCellValue extends CellValue {
   int get hashCode => Object.hash(runtimeType, value);
 
   @override
-  operator ==(Object other) {
+  bool operator ==(Object other) {
     return other is DoubleCellValue && other.value == value;
   }
 }
@@ -173,17 +166,11 @@ class DateCellValue extends CellValue {
   final int month;
   final int day;
 
-  const DateCellValue({
-    required this.year,
-    required this.month,
-    required this.day,
-  })  : assert(month <= 12 && month >= 1),
-        assert(day <= 31 && day >= 1);
+  const DateCellValue({required this.year, required this.month, required this.day})
+    : assert(month <= 12 && month >= 1),
+      assert(day <= 31 && day >= 1);
 
-  DateCellValue.fromDateTime(DateTime dt)
-      : year = dt.year,
-        month = dt.month,
-        day = dt.day;
+  DateCellValue.fromDateTime(DateTime dt) : year = dt.year, month = dt.month, day = dt.day;
 
   DateTime asDateTimeLocal() {
     return DateTime(year, month, day);
@@ -202,11 +189,8 @@ class DateCellValue extends CellValue {
   int get hashCode => Object.hash(runtimeType, year, month, day);
 
   @override
-  operator ==(Object other) {
-    return other is DateCellValue &&
-        other.year == year &&
-        other.month == month &&
-        other.day == day;
+  bool operator ==(Object other) {
+    return other is DateCellValue && other.year == year && other.month == month && other.day == day;
   }
 }
 
@@ -225,7 +209,7 @@ class TextCellValue extends CellValue {
   int get hashCode => Object.hash(runtimeType, value);
 
   @override
-  operator ==(Object other) {
+  bool operator ==(Object other) {
     return other is TextCellValue && other.value == value;
   }
 }
@@ -244,7 +228,7 @@ class BoolCellValue extends CellValue {
   int get hashCode => Object.hash(runtimeType, value);
 
   @override
-  operator ==(Object other) {
+  bool operator ==(Object other) {
     return other is BoolCellValue && other.value == value;
   }
 }
@@ -256,22 +240,16 @@ class TimeCellValue extends CellValue {
   final int millisecond;
   final int microsecond;
 
-  const TimeCellValue({
-    this.hour = 0,
-    this.minute = 0,
-    this.second = 0,
-    this.millisecond = 0,
-    this.microsecond = 0,
-  })  : assert(hour >= 0),
-        assert(minute <= 60 && minute >= 0),
-        assert(second <= 60 && second >= 0),
-        assert(millisecond <= 1000 && millisecond >= 0),
-        assert(microsecond <= 1000 && microsecond >= 0);
+  const TimeCellValue({this.hour = 0, this.minute = 0, this.second = 0, this.millisecond = 0, this.microsecond = 0})
+    : assert(hour >= 0),
+      assert(minute <= 60 && minute >= 0),
+      assert(second <= 60 && second >= 0),
+      assert(millisecond <= 1000 && millisecond >= 0),
+      assert(microsecond <= 1000 && microsecond >= 0);
 
   /// [fractionOfDay]=1.0 is 24 hours, 0.5 is 12 hours and so on.
   factory TimeCellValue.fromFractionOfDay(num fractionOfDay) {
-    var duration =
-        Duration(milliseconds: (fractionOfDay * 24 * 3600 * 1000).round());
+    final duration = Duration(milliseconds: (fractionOfDay * 24 * 3600 * 1000).round());
     return TimeCellValue.fromDuration(duration);
   }
 
@@ -287,11 +265,11 @@ class TimeCellValue extends CellValue {
   }
 
   TimeCellValue.fromTimeOfDateTime(DateTime dt)
-      : hour = dt.hour,
-        minute = dt.minute,
-        second = dt.second,
-        millisecond = dt.millisecond,
-        microsecond = dt.microsecond;
+    : hour = dt.hour,
+      minute = dt.minute,
+      second = dt.second,
+      millisecond = dt.millisecond,
+      microsecond = dt.microsecond;
 
   Duration asDuration() {
     return Duration(
@@ -309,17 +287,10 @@ class TimeCellValue extends CellValue {
   }
 
   @override
-  int get hashCode => Object.hash(
-        runtimeType,
-        hour,
-        minute,
-        second,
-        millisecond,
-        microsecond,
-      );
+  int get hashCode => Object.hash(runtimeType, hour, minute, second, millisecond, microsecond);
 
   @override
-  operator ==(Object other) {
+  bool operator ==(Object other) {
     return other is TimeCellValue &&
         other.hour == hour &&
         other.minute == minute &&
@@ -350,32 +321,30 @@ class DateTimeCellValue extends CellValue {
     this.second = 0,
     this.millisecond = 0,
     this.microsecond = 0,
-  })  : assert(month <= 12 && month >= 1),
-        assert(day <= 31 && day >= 1),
-        assert(hour <= 24 && hour >= 0),
-        assert(minute <= 60 && minute >= 0),
-        assert(second <= 60 && second >= 0),
-        assert(millisecond <= 1000 && millisecond >= 0),
-        assert(microsecond <= 1000 && microsecond >= 0);
+  }) : assert(month <= 12 && month >= 1),
+       assert(day <= 31 && day >= 1),
+       assert(hour <= 24 && hour >= 0),
+       assert(minute <= 60 && minute >= 0),
+       assert(second <= 60 && second >= 0),
+       assert(millisecond <= 1000 && millisecond >= 0),
+       assert(microsecond <= 1000 && microsecond >= 0);
 
   DateTimeCellValue.fromDateTime(DateTime date)
-      : year = date.year,
-        month = date.month,
-        day = date.day,
-        hour = date.hour,
-        minute = date.minute,
-        second = date.second,
-        millisecond = date.millisecond,
-        microsecond = date.microsecond;
+    : year = date.year,
+      month = date.month,
+      day = date.day,
+      hour = date.hour,
+      minute = date.minute,
+      second = date.second,
+      millisecond = date.millisecond,
+      microsecond = date.microsecond;
 
   DateTime asDateTimeLocal() {
-    return DateTime(
-        year, month, day, hour, minute, second, millisecond, microsecond);
+    return DateTime(year, month, day, hour, minute, second, millisecond, microsecond);
   }
 
   DateTime asDateTimeUtc() {
-    return DateTime.utc(
-        year, month, day, hour, minute, second, millisecond, microsecond);
+    return DateTime.utc(year, month, day, hour, minute, second, millisecond, microsecond);
   }
 
   @override
@@ -384,20 +353,10 @@ class DateTimeCellValue extends CellValue {
   }
 
   @override
-  int get hashCode => Object.hash(
-        runtimeType,
-        year,
-        month,
-        day,
-        hour,
-        minute,
-        second,
-        millisecond,
-        microsecond,
-      );
+  int get hashCode => Object.hash(runtimeType, year, month, day, hour, minute, second, millisecond, microsecond);
 
   @override
-  operator ==(Object other) {
+  bool operator ==(Object other) {
     return other is DateTimeCellValue &&
         other.year == year &&
         other.month == month &&

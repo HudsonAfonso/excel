@@ -1,9 +1,6 @@
-part of excel;
+part of '../../excel.dart';
 
-final List<String> _noCompression = <String>[
-  'mimetype',
-  'Thumbnails/thumbnail.png'
-];
+final List<String> _noCompression = <String>['mimetype', 'Thumbnails/thumbnail.png'];
 
 String getCellId(int columnIndex, int rowIndex) {
   return '${_numericToLetters(columnIndex + 1)}${rowIndex + 1}';
@@ -12,9 +9,9 @@ String getCellId(int columnIndex, int rowIndex) {
 String _isColorAppropriate(String value) {
   switch (value.length) {
     case 7:
-      return value.replaceAll(RegExp(r'#'), 'FF');
+      return value.replaceAll(RegExp('#'), 'FF');
     case 9:
-      return value.replaceAll(RegExp(r'#'), '');
+      return value.replaceAll(RegExp('#'), '');
     default:
       return value;
   }
@@ -24,7 +21,7 @@ String _isColorAppropriate(String value) {
 int lettersToNumeric(String letters) {
   var sum = 0, mul = 1, n = 1;
   for (var index = letters.length - 1; index >= 0; index--) {
-    var c = letters[index].codeUnitAt(0);
+    final c = letters[index].codeUnitAt(0);
     n = 1;
     if (65 <= c && c <= 90) {
       n += c - 65;
@@ -46,7 +43,7 @@ Iterable<XmlElement> _findCells(XmlElement row) {
 }
 
 int? _getCellNumber(XmlElement cell) {
-  var r = cell.getAttribute('r');
+  final r = cell.getAttribute('r');
   if (r == null) {
     return null;
   }
@@ -90,7 +87,7 @@ String _numericToLetters(int number) {
     }
 
     // Convert the remainder to a character.
-    var letter = String.fromCharCode(65 + remainder - 1);
+    final letter = String.fromCharCode(65 + remainder - 1);
 
     // Accumulate the column letters, right to left.
     letters = letter + letters;
@@ -116,16 +113,17 @@ String _normalizeNewLine(String text) {
 ///It is useful to convert CellId to Indexing.
 ///
 (int x, int y) _cellCoordsFromCellId(String cellId) {
-  var letters = cellId.runes.map(_letterOnly);
-  var lettersPart = utf8.decode(letters.where((rune) {
-    return rune > 0;
-  }).toList(growable: false));
-  var numericsPart = cellId.substring(lettersPart.length);
+  final letters = cellId.runes.map(_letterOnly);
+  final lettersPart = utf8.decode(
+    letters
+        .where((rune) {
+          return rune > 0;
+        })
+        .toList(growable: false),
+  );
+  final numericsPart = cellId.substring(lettersPart.length);
 
-  return (
-    int.parse(numericsPart) - 1,
-    lettersToNumeric(lettersPart) - 1
-  ); // [x , y]
+  return (int.parse(numericsPart) - 1, lettersToNumeric(lettersPart) - 1); // [x , y]
 }
 
 ///
@@ -146,45 +144,39 @@ String getSpanCellId(int startColumn, int startRow, int endColumn, int endRow) {
 ///
 ///returns updated SpanObject location as there might be cross-sectional interaction between the two spanning objects.
 ///
-(
-  bool changeValue,
-  (int startColumn, int startRow, int endColumn, int endRow)
-) _isLocationChangeRequired(
-    int startColumn, int startRow, int endColumn, int endRow, _Span spanObj) {
-  bool changeValue = (
-          // Overlapping checker
-          startRow <= spanObj.rowSpanStart &&
-              startColumn <= spanObj.columnSpanStart &&
-              endRow >= spanObj.rowSpanEnd &&
-              endColumn >= spanObj.columnSpanEnd)
+(bool changeValue, (int startColumn, int startRow, int endColumn, int endRow)) _isLocationChangeRequired(
+  int startColumn,
+  int startRow,
+  int endColumn,
+  int endRow,
+  _Span spanObj,
+) {
+  final changeValue =
+      (
+      // Overlapping checker
+      startRow <= spanObj.rowSpanStart &&
+          startColumn <= spanObj.columnSpanStart &&
+          endRow >= spanObj.rowSpanEnd &&
+          endColumn >= spanObj.columnSpanEnd)
       // first check starts here
       ||
       ( // outwards checking
-          ((startColumn < spanObj.columnSpanStart &&
-                      endColumn >= spanObj.columnSpanStart) ||
-                  (startColumn <= spanObj.columnSpanEnd &&
-                      endColumn > spanObj.columnSpanEnd))
-              // inwards checking
-              &&
-              ((startRow >= spanObj.rowSpanStart &&
-                      startRow <= spanObj.rowSpanEnd) ||
-                  (endRow >= spanObj.rowSpanStart &&
-                      endRow <= spanObj.rowSpanEnd)))
-
+      ((startColumn < spanObj.columnSpanStart && endColumn >= spanObj.columnSpanStart) ||
+              (startColumn <= spanObj.columnSpanEnd && endColumn > spanObj.columnSpanEnd))
+          // inwards checking
+          &&
+          ((startRow >= spanObj.rowSpanStart && startRow <= spanObj.rowSpanEnd) ||
+              (endRow >= spanObj.rowSpanStart && endRow <= spanObj.rowSpanEnd)))
       // second check starts here
       ||
       (
-          // outwards checking
-          ((startRow < spanObj.rowSpanStart &&
-                      endRow >= spanObj.rowSpanStart) ||
-                  (startRow <= spanObj.rowSpanEnd &&
-                      endRow > spanObj.rowSpanEnd))
-              // inwards checking
-              &&
-              ((startColumn >= spanObj.columnSpanStart &&
-                      startColumn <= spanObj.columnSpanEnd) ||
-                  (endColumn >= spanObj.columnSpanStart &&
-                      endColumn <= spanObj.columnSpanEnd)));
+      // outwards checking
+      ((startRow < spanObj.rowSpanStart && endRow >= spanObj.rowSpanStart) ||
+              (startRow <= spanObj.rowSpanEnd && endRow > spanObj.rowSpanEnd))
+          // inwards checking
+          &&
+          ((startColumn >= spanObj.columnSpanStart && startColumn <= spanObj.columnSpanEnd) ||
+              (endColumn >= spanObj.columnSpanStart && endColumn <= spanObj.columnSpanEnd)));
 
   if (changeValue) {
     if (startColumn > spanObj.columnSpanStart) {

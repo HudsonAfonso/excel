@@ -1,34 +1,27 @@
-part of excel;
+part of '../../excel.dart';
 
 /// Styling class for cells
 // ignore: must_be_immutable
 class _FontStyle extends Equatable {
   ExcelColor? _fontColorHex = ExcelColor.black;
-  String? _fontFamily;
-  FontScheme _fontScheme = FontScheme.Unset;
+  String? fontFamily;
+  FontScheme fontScheme = FontScheme.Unset;
   bool _bold = false, _italic = false;
-  Underline _underline = Underline.None;
-  int? _fontSize;
+  Underline underline = Underline.None;
+  int? fontSize;
 
-  _FontStyle(
-      {ExcelColor? fontColorHex = ExcelColor.black,
-      int? fontSize,
-      String? fontFamily,
-      FontScheme fontScheme = FontScheme.Unset,
-      bool bold = false,
-      Underline underline = Underline.None,
-      bool italic = false}) {
+  _FontStyle({
+    ExcelColor? fontColorHex = ExcelColor.black,
+    this.fontSize,
+    this.fontFamily,
+    this.fontScheme = FontScheme.Unset,
+    bool bold = false,
+    this.underline = Underline.None,
+    bool italic = false,
+  }) {
     _bold = bold;
 
-    _fontSize = fontSize;
-
     _italic = italic;
-
-    _fontFamily = fontFamily;
-
-    _fontScheme = fontScheme;
-
-    _underline = underline;
 
     if (fontColorHex != null) {
       _fontColorHex = _isColorAppropriate(fontColorHex.colorHex).excelColor;
@@ -49,48 +42,6 @@ class _FontStyle extends Equatable {
     } else {
       _fontColorHex = ExcelColor.black;
     }
-  }
-
-  /// `Get FontFamily`
-  String? get fontFamily {
-    return _fontFamily;
-  }
-
-  /// `Set FontFamily`
-  set fontFamily(String? family) {
-    _fontFamily = family;
-  }
-
-  ///`Get FontScheme`
-  ///
-  FontScheme get fontScheme {
-    return _fontScheme;
-  }
-
-  ///`Set FontScheme`
-  ///
-  set fontScheme(FontScheme scheme) {
-    _fontScheme = scheme;
-  }
-
-  /// Get Font Size
-  int? get fontSize {
-    return _fontSize;
-  }
-
-  /// Set Font Size
-  set fontSize(int? _fs) {
-    _fontSize = _fs;
-  }
-
-  /// Get `Underline`
-  Underline get underline {
-    return _underline;
-  }
-
-  /// set `Underline`
-  set underline(Underline underline) {
-    _underline = underline;
   }
 
   /// Get `Bold`
@@ -114,12 +65,5 @@ class _FontStyle extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
-        _bold,
-        _italic,
-        _fontSize,
-        _underline,
-        _fontFamily,
-        _fontColorHex,
-      ];
+  List<Object?> get props => [_bold, _italic, fontSize, underline, fontFamily, _fontColorHex];
 }

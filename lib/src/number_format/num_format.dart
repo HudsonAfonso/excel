@@ -1,8 +1,8 @@
-part of excel;
+part of '../../excel.dart';
 
 Map<V, K> _createInverseMap<K, V>(Map<K, V> map) {
   final inverse = <V, K>{};
-  for (var entry in map.entries) {
+  for (final entry in map.entries) {
     assert(!inverse.containsKey(entry.value), 'map values are not unique');
     inverse[entry.value] = entry.key;
   }
@@ -20,8 +20,7 @@ class NumFormatMaintainer {
       throw Exception('numFmtId $numFmtId already exists');
     }
     if (numFmtId < _firstCustomFmtId) {
-      throw Exception(
-          'invalid numFmtId $numFmtId, custom numFmtId must be $_firstCustomFmtId or greater');
+      throw Exception('invalid numFmtId $numFmtId, custom numFmtId must be $_firstCustomFmtId or greater');
     }
     _map[numFmtId] = format;
     _inverseMap[format] = numFmtId;
@@ -62,72 +61,40 @@ sealed class NumFormat {
   static const defaultTime = standard_20;
   static const defaultDateTime = standard_22;
 
-  static const standard_0 =
-      StandardNumericNumFormat._(numFmtId: 0, formatCode: 'General');
-  static const standard_1 =
-      StandardNumericNumFormat._(numFmtId: 1, formatCode: "0");
-  static const standard_2 =
-      StandardNumericNumFormat._(numFmtId: 2, formatCode: "0.00");
-  static const standard_3 =
-      StandardNumericNumFormat._(numFmtId: 3, formatCode: "#,##0");
-  static const standard_4 =
-      StandardNumericNumFormat._(numFmtId: 4, formatCode: "#,##0.00");
-  static const standard_9 =
-      StandardNumericNumFormat._(numFmtId: 9, formatCode: "0%");
-  static const standard_10 =
-      StandardNumericNumFormat._(numFmtId: 10, formatCode: "0.00%");
-  static const standard_11 =
-      StandardNumericNumFormat._(numFmtId: 11, formatCode: "0.00E+00");
-  static const standard_12 =
-      StandardNumericNumFormat._(numFmtId: 12, formatCode: "# ?/?");
-  static const standard_13 =
-      StandardNumericNumFormat._(numFmtId: 13, formatCode: "# ??/??");
-  static const standard_14 =
-      StandardDateTimeNumFormat._(numFmtId: 14, formatCode: "mm-dd-yy");
-  static const standard_15 =
-      StandardDateTimeNumFormat._(numFmtId: 15, formatCode: "d-mmm-yy");
-  static const standard_16 =
-      StandardDateTimeNumFormat._(numFmtId: 16, formatCode: "d-mmm");
-  static const standard_17 =
-      StandardDateTimeNumFormat._(numFmtId: 17, formatCode: "mmm-yy");
-  static const standard_18 =
-      StandardTimeNumFormat._(numFmtId: 18, formatCode: "h:mm AM/PM");
-  static const standard_19 =
-      StandardTimeNumFormat._(numFmtId: 19, formatCode: "h:mm:ss AM/PM");
-  static const standard_20 =
-      StandardTimeNumFormat._(numFmtId: 20, formatCode: "h:mm");
-  static const standard_21 =
-      StandardTimeNumFormat._(numFmtId: 21, formatCode: "h:mm:dd");
-  static const standard_22 =
-      StandardDateTimeNumFormat._(numFmtId: 22, formatCode: "m/d/yy h:mm");
-  static const standard_37 =
-      StandardNumericNumFormat._(numFmtId: 37, formatCode: "#,##0 ;(#,##0)");
-  static const standard_38 = StandardNumericNumFormat._(
-      numFmtId: 38, formatCode: "#,##0 ;[Red](#,##0)");
-  static const standard_39 = StandardNumericNumFormat._(
-      numFmtId: 39, formatCode: "#,##0.00;(#,##0.00)");
-  static const standard_40 = StandardNumericNumFormat._(
-      numFmtId: 40, formatCode: "#,##0.00;[Red](#,#)");
-  static const standard_45 =
-      StandardTimeNumFormat._(numFmtId: 45, formatCode: "mm:ss");
-  static const standard_46 =
-      StandardTimeNumFormat._(numFmtId: 46, formatCode: "[h]:mm:ss");
-  static const standard_47 =
-      StandardTimeNumFormat._(numFmtId: 47, formatCode: "mmss.0");
-  static const standard_48 =
-      StandardNumericNumFormat._(numFmtId: 48, formatCode: "##0.0");
-  static const standard_49 =
-      StandardNumericNumFormat._(numFmtId: 49, formatCode: "@");
+  static const standard_0 = StandardNumericNumFormat._(numFmtId: 0, formatCode: 'General');
+  static const standard_1 = StandardNumericNumFormat._(numFmtId: 1, formatCode: '0');
+  static const standard_2 = StandardNumericNumFormat._(numFmtId: 2, formatCode: '0.00');
+  static const standard_3 = StandardNumericNumFormat._(numFmtId: 3, formatCode: '#,##0');
+  static const standard_4 = StandardNumericNumFormat._(numFmtId: 4, formatCode: '#,##0.00');
+  static const standard_9 = StandardNumericNumFormat._(numFmtId: 9, formatCode: '0%');
+  static const standard_10 = StandardNumericNumFormat._(numFmtId: 10, formatCode: '0.00%');
+  static const standard_11 = StandardNumericNumFormat._(numFmtId: 11, formatCode: '0.00E+00');
+  static const standard_12 = StandardNumericNumFormat._(numFmtId: 12, formatCode: '# ?/?');
+  static const standard_13 = StandardNumericNumFormat._(numFmtId: 13, formatCode: '# ??/??');
+  static const standard_14 = StandardDateTimeNumFormat._(numFmtId: 14, formatCode: 'mm-dd-yy');
+  static const standard_15 = StandardDateTimeNumFormat._(numFmtId: 15, formatCode: 'd-mmm-yy');
+  static const standard_16 = StandardDateTimeNumFormat._(numFmtId: 16, formatCode: 'd-mmm');
+  static const standard_17 = StandardDateTimeNumFormat._(numFmtId: 17, formatCode: 'mmm-yy');
+  static const standard_18 = StandardTimeNumFormat._(numFmtId: 18, formatCode: 'h:mm AM/PM');
+  static const standard_19 = StandardTimeNumFormat._(numFmtId: 19, formatCode: 'h:mm:ss AM/PM');
+  static const standard_20 = StandardTimeNumFormat._(numFmtId: 20, formatCode: 'h:mm');
+  static const standard_21 = StandardTimeNumFormat._(numFmtId: 21, formatCode: 'h:mm:dd');
+  static const standard_22 = StandardDateTimeNumFormat._(numFmtId: 22, formatCode: 'm/d/yy h:mm');
+  static const standard_37 = StandardNumericNumFormat._(numFmtId: 37, formatCode: '#,##0 ;(#,##0)');
+  static const standard_38 = StandardNumericNumFormat._(numFmtId: 38, formatCode: '#,##0 ;[Red](#,##0)');
+  static const standard_39 = StandardNumericNumFormat._(numFmtId: 39, formatCode: '#,##0.00;(#,##0.00)');
+  static const standard_40 = StandardNumericNumFormat._(numFmtId: 40, formatCode: '#,##0.00;[Red](#,#)');
+  static const standard_45 = StandardTimeNumFormat._(numFmtId: 45, formatCode: 'mm:ss');
+  static const standard_46 = StandardTimeNumFormat._(numFmtId: 46, formatCode: '[h]:mm:ss');
+  static const standard_47 = StandardTimeNumFormat._(numFmtId: 47, formatCode: 'mmss.0');
+  static const standard_48 = StandardNumericNumFormat._(numFmtId: 48, formatCode: '##0.0');
+  static const standard_49 = StandardNumericNumFormat._(numFmtId: 49, formatCode: '@');
 
-  const NumFormat({
-    required this.formatCode,
-  });
+  const NumFormat({required this.formatCode});
 
-  static CustomNumFormat custom({
-    required String formatCode,
-  }) {
+  static CustomNumFormat custom({required String formatCode}) {
     if (formatCode == 'General') {
-      return CustomNumericNumFormat(formatCode: 'General');
+      return const CustomNumericNumFormat(formatCode: 'General');
     }
 
     //const dateParts = ['m', 'mm', 'mmm', 'mmmm', 'mmmmm', 'd', 'dd', 'ddd', 'yy', 'yyyy'];
@@ -157,21 +124,19 @@ sealed class NumFormat {
   int get hashCode => Object.hash(runtimeType, formatCode);
 
   @override
-  operator ==(Object other) =>
-      other.runtimeType == runtimeType &&
-      (other as NumFormat).formatCode == formatCode;
+  bool operator ==(Object other) => other.runtimeType == runtimeType && (other as NumFormat).formatCode == formatCode;
 
   bool accepts(CellValue? value);
 
   static NumFormat defaultFor(CellValue? value) => switch (value) {
-        null || FormulaCellValue() || TextCellValue() => NumFormat.standard_0,
-        IntCellValue() => NumFormat.defaultNumeric,
-        DoubleCellValue() => NumFormat.defaultFloat,
-        DateCellValue() => NumFormat.defaultDate,
-        BoolCellValue() => NumFormat.defaultBool,
-        TimeCellValue() => NumFormat.defaultTime,
-        DateTimeCellValue() => NumFormat.defaultDateTime,
-      };
+    null || FormulaCellValue() || TextCellValue() => NumFormat.standard_0,
+    IntCellValue() => NumFormat.defaultNumeric,
+    DoubleCellValue() => NumFormat.defaultFloat,
+    DateCellValue() => NumFormat.defaultDate,
+    BoolCellValue() => NumFormat.defaultBool,
+    TimeCellValue() => NumFormat.defaultTime,
+    DateTimeCellValue() => NumFormat.defaultDateTime,
+  };
 }
 
 const Map<int, NumFormat> _standardNumFormats = {
@@ -250,13 +215,12 @@ sealed class StandardNumFormat implements NumFormat {
 }
 
 sealed class CustomNumFormat implements NumFormat {
+  @override
   String get formatCode;
 }
 
 sealed class NumericNumFormat extends NumFormat {
-  const NumericNumFormat({
-    required super.formatCode,
-  });
+  const NumericNumFormat({required super.formatCode});
 
   @override
   CellValue read(String v) {
@@ -269,7 +233,7 @@ sealed class NumericNumFormat extends NumFormat {
     }
 
     // also read .0 (or even .00) as an int
-    bool noActualDecimalPlaces = true;
+    var noActualDecimalPlaces = true;
     for (var idx = decimalSeparatorIdx + 1; idx < v.length; ++idx) {
       if (v[idx] != '0') {
         noActualDecimalPlaces = false;
@@ -292,28 +256,24 @@ sealed class NumericNumFormat extends NumFormat {
   }
 }
 
-class StandardNumericNumFormat extends NumericNumFormat
-    implements StandardNumFormat {
+class StandardNumericNumFormat extends NumericNumFormat implements StandardNumFormat {
   @override
   final int numFmtId;
 
-  const StandardNumericNumFormat._({
-    required this.numFmtId,
-    required super.formatCode,
-  });
+  const StandardNumericNumFormat._({required this.numFmtId, required super.formatCode});
 
   @override
   bool accepts(CellValue? value) => switch (value) {
-        null => true,
-        FormulaCellValue() => true,
-        IntCellValue() => true,
-        TextCellValue() => numFmtId == 0,
-        BoolCellValue() => true,
-        DoubleCellValue() => true,
-        DateCellValue() => false,
-        TimeCellValue() => false,
-        DateTimeCellValue() => false,
-      };
+    null => true,
+    FormulaCellValue() => true,
+    IntCellValue() => true,
+    TextCellValue() => numFmtId == 0,
+    BoolCellValue() => true,
+    DoubleCellValue() => true,
+    DateCellValue() => false,
+    TimeCellValue() => false,
+    DateTimeCellValue() => false,
+  };
 
   @override
   String toString() {
@@ -321,24 +281,21 @@ class StandardNumericNumFormat extends NumericNumFormat
   }
 }
 
-class CustomNumericNumFormat extends NumericNumFormat
-    implements CustomNumFormat {
-  const CustomNumericNumFormat({
-    required super.formatCode,
-  });
+class CustomNumericNumFormat extends NumericNumFormat implements CustomNumFormat {
+  const CustomNumericNumFormat({required super.formatCode});
 
   @override
   bool accepts(CellValue? value) => switch (value) {
-        null => true,
-        FormulaCellValue() => true,
-        IntCellValue() => true,
-        TextCellValue() => false,
-        BoolCellValue() => true,
-        DoubleCellValue() => true,
-        DateCellValue() => false,
-        TimeCellValue() => false,
-        DateTimeCellValue() => false,
-      };
+    null => true,
+    FormulaCellValue() => true,
+    IntCellValue() => true,
+    TextCellValue() => false,
+    BoolCellValue() => true,
+    DoubleCellValue() => true,
+    DateCellValue() => false,
+    TimeCellValue() => false,
+    DateTimeCellValue() => false,
+  };
 
   @override
   String toString() {
@@ -347,27 +304,19 @@ class CustomNumericNumFormat extends NumericNumFormat
 }
 
 sealed class DateTimeNumFormat extends NumFormat {
-  const DateTimeNumFormat({
-    required super.formatCode,
-  });
+  const DateTimeNumFormat({required super.formatCode});
 
   @override
   CellValue read(String v) {
     if (v == '0') {
-      return const TimeCellValue(
-        hour: 0,
-        minute: 0,
-        second: 0,
-        millisecond: 0,
-        microsecond: 0,
-      );
+      return const TimeCellValue();
     }
     final value = num.parse(v);
     if (value < 1) {
       return TimeCellValue.fromFractionOfDay(value);
     }
-    var delta = value * 24 * 3600 * 1000;
-    var dateOffset = DateTime.utc(1899, 12, 30);
+    final delta = value * 24 * 3600 * 1000;
+    final dateOffset = DateTime.utc(1899, 12, 30);
     final utcDate = dateOffset.add(Duration(milliseconds: delta.round()));
     if (!v.contains('.') || v.endsWith('.0')) {
       return DateCellValue.fromDateTime(utcDate);
@@ -377,14 +326,14 @@ sealed class DateTimeNumFormat extends NumFormat {
   }
 
   String writeDate(DateCellValue value) {
-    var dateOffset = DateTime.utc(1899, 12, 30);
+    final dateOffset = DateTime.utc(1899, 12, 30);
     final delta = value.asDateTimeUtc().difference(dateOffset);
     final dayFractions = delta.inMilliseconds.toDouble() / (1000 * 3600 * 24);
     return dayFractions.toString();
   }
 
   String writeDateTime(DateTimeCellValue value) {
-    var dateOffset = DateTime.utc(1899, 12, 30);
+    final dateOffset = DateTime.utc(1899, 12, 30);
     final delta = value.asDateTimeUtc().difference(dateOffset);
     final dayFractions = delta.inMilliseconds.toDouble() / (1000 * 3600 * 24);
     return dayFractions.toString();
@@ -392,26 +341,23 @@ sealed class DateTimeNumFormat extends NumFormat {
 
   @override
   bool accepts(CellValue? value) => switch (value) {
-        null => true,
-        FormulaCellValue() => true,
-        IntCellValue() => false,
-        TextCellValue() => false,
-        BoolCellValue() => false,
-        DoubleCellValue() => false,
-        DateCellValue() => true,
-        DateTimeCellValue() => true,
-        TimeCellValue() => false,
-      };
+    null => true,
+    FormulaCellValue() => true,
+    IntCellValue() => false,
+    TextCellValue() => false,
+    BoolCellValue() => false,
+    DoubleCellValue() => false,
+    DateCellValue() => true,
+    DateTimeCellValue() => true,
+    TimeCellValue() => false,
+  };
 }
 
-class StandardDateTimeNumFormat extends DateTimeNumFormat
-    implements StandardNumFormat {
+class StandardDateTimeNumFormat extends DateTimeNumFormat implements StandardNumFormat {
+  @override
   final int numFmtId;
 
-  const StandardDateTimeNumFormat._({
-    required this.numFmtId,
-    required super.formatCode,
-  });
+  const StandardDateTimeNumFormat._({required this.numFmtId, required super.formatCode});
 
   @override
   String toString() {
@@ -419,11 +365,8 @@ class StandardDateTimeNumFormat extends DateTimeNumFormat
   }
 }
 
-class CustomDateTimeNumFormat extends DateTimeNumFormat
-    implements CustomNumFormat {
-  const CustomDateTimeNumFormat({
-    required super.formatCode,
-  });
+class CustomDateTimeNumFormat extends DateTimeNumFormat implements CustomNumFormat {
+  const CustomDateTimeNumFormat({required super.formatCode});
 
   @override
   String toString() {
@@ -432,24 +375,16 @@ class CustomDateTimeNumFormat extends DateTimeNumFormat
 }
 
 sealed class TimeNumFormat extends NumFormat {
-  const TimeNumFormat({
-    required super.formatCode,
-  });
+  const TimeNumFormat({required super.formatCode});
 
   @override
   CellValue read(String v) {
     if (v == '0') {
-      return const TimeCellValue(
-        hour: 0,
-        minute: 0,
-        second: 0,
-        millisecond: 0,
-        microsecond: 0,
-      );
+      return const TimeCellValue();
     }
-    var value = num.parse(v);
+    final value = num.parse(v);
     if (value < 1) {
-      var delta = value * 24 * 3600 * 1000;
+      final delta = value * 24 * 3600 * 1000;
       final time = Duration(milliseconds: delta.round());
       final date = DateTime.utc(0).add(time);
       return TimeCellValue(
@@ -460,15 +395,11 @@ sealed class TimeNumFormat extends NumFormat {
         microsecond: date.microsecond,
       );
     }
-    var delta = value * 24 * 3600 * 1000;
-    var dateOffset = DateTime.utc(1899, 12, 30);
+    final delta = value * 24 * 3600 * 1000;
+    final dateOffset = DateTime.utc(1899, 12, 30);
     final utcDate = dateOffset.add(Duration(milliseconds: delta.round()));
     if (!v.contains('.') || v.endsWith('.0')) {
-      return DateCellValue(
-        year: utcDate.year,
-        month: utcDate.month,
-        day: utcDate.day,
-      );
+      return DateCellValue(year: utcDate.year, month: utcDate.month, day: utcDate.day);
     } else {
       return DateTimeCellValue(
         year: utcDate.year,
@@ -484,32 +415,29 @@ sealed class TimeNumFormat extends NumFormat {
   }
 
   String writeTime(TimeCellValue value) {
-    final fractionOfDay =
-        value.asDuration().inMilliseconds.toDouble() / (1000 * 3600 * 24);
+    final fractionOfDay = value.asDuration().inMilliseconds.toDouble() / (1000 * 3600 * 24);
     return fractionOfDay.toString();
   }
 
   @override
   bool accepts(CellValue? value) => switch (value) {
-        null => true,
-        FormulaCellValue() => true,
-        IntCellValue() => false,
-        TextCellValue() => false,
-        BoolCellValue() => false,
-        DoubleCellValue() => false,
-        DateCellValue() => false,
-        DateTimeCellValue() => false,
-        TimeCellValue() => true,
-      };
+    null => true,
+    FormulaCellValue() => true,
+    IntCellValue() => false,
+    TextCellValue() => false,
+    BoolCellValue() => false,
+    DoubleCellValue() => false,
+    DateCellValue() => false,
+    DateTimeCellValue() => false,
+    TimeCellValue() => true,
+  };
 }
 
 class StandardTimeNumFormat extends TimeNumFormat implements StandardNumFormat {
+  @override
   final int numFmtId;
 
-  const StandardTimeNumFormat._({
-    required this.numFmtId,
-    required super.formatCode,
-  });
+  const StandardTimeNumFormat._({required this.numFmtId, required super.formatCode});
 
   @override
   String toString() {
@@ -518,9 +446,7 @@ class StandardTimeNumFormat extends TimeNumFormat implements StandardNumFormat {
 }
 
 class CustomTimeNumFormat extends TimeNumFormat implements CustomNumFormat {
-  const CustomTimeNumFormat({
-    required super.formatCode,
-  });
+  const CustomTimeNumFormat({required super.formatCode});
 
   @override
   String toString() {

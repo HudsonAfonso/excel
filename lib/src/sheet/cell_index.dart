@@ -1,15 +1,14 @@
-part of excel;
+part of '../../excel.dart';
 
 class CellIndex extends Equatable {
-  CellIndex._({required this.columnIndex, required this.rowIndex});
+  const CellIndex._({required this.columnIndex, required this.rowIndex});
 
   ///
   ///```
   ///CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 0 ); // A1
   ///CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 1 ); // A2
   ///```
-  factory CellIndex.indexByColumnRow(
-      {required int columnIndex, required int rowIndex}) {
+  factory CellIndex.indexByColumnRow({required int columnIndex, required int rowIndex}) {
     return CellIndex._(columnIndex: columnIndex, rowIndex: rowIndex);
   }
 
@@ -29,7 +28,7 @@ class CellIndex extends Equatable {
   /// var cellIndex = CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 0 );
   /// var cell = cellIndex.cellId; // A1
   String get cellId {
-    return getCellId(this.columnIndex, this.rowIndex);
+    return getCellId(columnIndex, rowIndex);
   }
 
   final int rowIndex;

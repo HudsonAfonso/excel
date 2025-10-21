@@ -1,38 +1,23 @@
-part of excel;
+part of '../../excel.dart';
 
 ///enum for `wrapping` up the text
 ///
-enum TextWrapping {
-  WrapText,
-  Clip,
-}
+enum TextWrapping { WrapText, Clip }
 
 ///
 ///enum for setting `vertical alignment`
 ///
-enum VerticalAlign {
-  Top,
-  Center,
-  Bottom,
-}
+enum VerticalAlign { Top, Center, Bottom }
 
 ///
 ///enum for setting `horizontal alignment`
 ///
-enum HorizontalAlign {
-  Left,
-  Center,
-  Right,
-}
+enum HorizontalAlign { Left, Center, Right }
 
 ///
 ///`Underline`
 ///
-enum Underline {
-  None,
-  Single,
-  Double,
-}
+enum Underline { None, Single, Double }
 
 ///
 ///enum for setting `font scheme`

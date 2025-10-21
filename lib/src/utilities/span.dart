@@ -1,4 +1,4 @@
-part of excel;
+part of '../../excel.dart';
 
 // For Spanning the columns and rows
 class _Span extends Equatable {
@@ -7,26 +7,19 @@ class _Span extends Equatable {
   final int rowSpanEnd;
   final int columnSpanEnd;
 
-  _Span({
+  const _Span({
     required this.rowSpanStart,
     required this.columnSpanStart,
     required this.rowSpanEnd,
     required this.columnSpanEnd,
   });
 
-  _Span.fromCellIndex({
-    required CellIndex start,
-    required CellIndex end,
-  })  : rowSpanStart = start.rowIndex,
-        columnSpanStart = start.columnIndex,
-        rowSpanEnd = end.rowIndex,
-        columnSpanEnd = end.columnIndex;
+  _Span.fromCellIndex({required CellIndex start, required CellIndex end})
+    : rowSpanStart = start.rowIndex,
+      columnSpanStart = start.columnIndex,
+      rowSpanEnd = end.rowIndex,
+      columnSpanEnd = end.columnIndex;
 
   @override
-  List<Object?> get props => [
-        rowSpanStart,
-        columnSpanStart,
-        rowSpanEnd,
-        columnSpanEnd,
-      ];
+  List<Object?> get props => [rowSpanStart, columnSpanStart, rowSpanEnd, columnSpanEnd];
 }

@@ -1,8 +1,7 @@
-part of excel;
+part of '../../excel.dart';
 
 class _SharedStringsMaintainer {
-  final Map<SharedString, _IndexingHolder> _map =
-      <SharedString, _IndexingHolder>{};
+  final Map<SharedString, _IndexingHolder> _map = <SharedString, _IndexingHolder>{};
   final Map<String, SharedString> _mapString = <String, SharedString>{};
   final List<SharedString> _list = <SharedString>[];
   int _index = 0;
@@ -15,10 +14,10 @@ class _SharedStringsMaintainer {
 
   SharedString addFromString(String val) {
     final newSharedString = SharedString(
-        node: XmlElement(XmlName('si'), [], [
-      XmlElement(XmlName('t'),
-          [XmlAttribute(XmlName("space", "xml"), "preserve")], [XmlText(val)]),
-    ]));
+      node: XmlElement(XmlName('si'), [], [
+        XmlElement(XmlName('t'), [XmlAttribute(XmlName('space', 'xml'), 'preserve')], [XmlText(val)]),
+      ]),
+    );
 
     add(newSharedString, val);
     return newSharedString;
@@ -60,7 +59,7 @@ class _IndexingHolder {
   _IndexingHolder(this.index, [int _count = 1]) : count = _count;
 
   void increaseCount() {
-    this.count += 1;
+    count += 1;
   }
 }
 
@@ -72,8 +71,7 @@ class SharedString {
 
   @override
   String toString() {
-    assert(false,
-        'prefer stringValue over SharedString.toString() in development');
+    assert(false, 'prefer stringValue over SharedString.toString() in development');
     return stringValue;
   }
 
@@ -121,23 +119,17 @@ class SharedString {
                       break;
                     case 'u': //18.4.13 u (Underline)
                       style = style.copyWith(
-                          underlineVal:
-                              runProperty.getAttribute('val') == 'double'
-                                  ? Underline.Double
-                                  : Underline.Single);
+                        underlineVal: runProperty.getAttribute('val') == 'double' ? Underline.Double : Underline.Single,
+                      );
                       break;
                     case 'sz': //18.4.11 sz (Font Size)
-                      style =
-                          style.copyWith(fontSizeVal: getDouble(runProperty));
+                      style = style.copyWith(fontSizeVal: getDouble(runProperty));
                       break;
                     case 'rFont': //18.4.5 rFont (Font)
-                      style = style.copyWith(
-                          fontFamilyVal: runProperty.getAttribute('val'));
+                      style = style.copyWith(fontFamilyVal: runProperty.getAttribute('val'));
                       break;
                     case 'color': //18.3.1.15 color (Data Bar Color)
-                      style = style.copyWith(
-                          fontColorHexVal:
-                              runProperty.getAttribute('rgb')?.excelColor);
+                      style = style.copyWith(fontColorHexVal: runProperty.getAttribute('rgb')?.excelColor);
                       break;
                   }
                 }
@@ -145,7 +137,7 @@ class SharedString {
 
               /// Text
               case 't': //18.4.12 t (Text)
-                if (children == null) children = [];
+                children ??= [];
                 children.add(TextSpan(text: runChild.innerText, style: style));
                 break;
             }
@@ -163,10 +155,9 @@ class SharedString {
   }
 
   String get stringValue {
-    var buffer = StringBuffer();
+    final buffer = StringBuffer();
     node.findAllElements('t').forEach((child) {
-      if (child.parentElement == null ||
-          child.parentElement!.name.local != 'rPh') {
+      if (child.parentElement == null || child.parentElement!.name.local != 'rPh') {
         buffer.write(Parser._parseValue(child));
       }
     });
@@ -177,10 +168,8 @@ class SharedString {
   int get hashCode => _hashCode;
 
   @override
-  operator ==(Object other) {
-    return other is SharedString &&
-        other.hashCode == _hashCode &&
-        other.stringValue == stringValue;
+  bool operator ==(Object other) {
+    return other is SharedString && other.hashCode == _hashCode && other.stringValue == stringValue;
   }
 
   bool matches(String value) {
@@ -197,23 +186,22 @@ class TextSpan {
 
   @override
   String toString() {
-    String r = '';
+    var r = '';
     if (text != null) r += text!;
     if (children != null) r += children!.join();
     return r;
   }
 
   @override
-  operator ==(Object other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
     return other is TextSpan &&
         other.text == text &&
         other.style == style &&
-        ListEquality().equals(other.children, children);
+        const ListEquality<TextSpan>().equals(other.children, children);
   }
 
   @override
-  int get hashCode =>
-      Object.hash(text, style, Object.hashAll(children ?? const []));
+  int get hashCode => Object.hash(text, style, Object.hashAll(children ?? const []));
 }

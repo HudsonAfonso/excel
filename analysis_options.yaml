@@ -1,0 +1,221 @@
+include: package:dart_flutter_team_lints/analysis_options.yaml
+
+formatter:
+  page_width: 120
+  # trailing_commas: preserve
+
+analyzer:
+  strong-mode:
+    implicit-casts: false # Prevent implicit casting, requiring explicit casts
+    implicit-dynamic: false # Disable implicit dynamic typing for better type safety
+  language:
+    strict-casts: false
+    strict-inference: true
+    strict-raw-types: true
+  errors:
+    missing_required_param: error
+    missing_return: error
+    todo: warning
+    dead_code: warning
+    depend_on_referenced_packages: error
+  exclude:
+    - .dart_tool/**
+    - .idea/**
+    - android/**
+    - assets/**
+    - build/**
+    - dist/**
+    - linux/**
+    - macos/**
+    - web/**
+    - lib/**.gen.dart
+    - lib/**.g.dart
+#  plugins:
+#    - dart_code_linter
+
+dart_code_linter:
+  metrics-exclude:
+    - test/**
+    - lib/gen/**
+  rules:
+    - arguments-ordering:
+        child-last: true
+    - avoid-collection-methods-with-unrelated-types
+    - avoid-nested-conditional-expressions:
+        acceptable-level: 2
+    - avoid-throw-in-catch-block
+    - avoid-unnecessary-type-assertions
+    - avoid-unnecessary-type-casts
+    - avoid-unrelated-type-assertions
+    - avoid-unused-parameters
+    - binary-expression-operand-order
+    - double-literal-format
+    - member-ordering:
+        alphabetize: true
+        alphabetize-by-type: true
+        order:
+          - constructors
+          - const-constructors
+          - const-fields
+          - final-fields
+          - late-fields
+          - public-fields
+          - private-fields
+          - public-getters
+          - public-getters
+          - private-getters
+          - public-setters
+          - private-setters
+          - static-methods
+          - init-method
+          - init-state-method
+          - build-method
+          - public-methods
+          - private-methods
+          - to-string-method
+          - dispose-method
+        widgets-order:
+          - constructors
+          - const-constructors
+          - const-fields
+          - final-fields
+          - late-fields
+          - public-fields
+          - private-fields
+          - public-getters
+          - public-getters
+          - private-getters
+          - public-setters
+          - private-setters
+          - static-methods
+          - init-method
+          - init-state-method
+          - build-method
+          - public-methods
+          - private-methods
+          - to-string-method
+          - dispose-method
+    - newline-before-return
+    - no-boolean-literal-compare
+    - no-empty-block
+    - no-equal-then-else
+    #    - no-magic-number
+    - no-object-declaration
+    - prefer-async-await
+    - prefer-conditional-expressions
+    - prefer-correct-type-name
+    - prefer-first
+    - prefer-immediate-return
+    - prefer-iterable-of
+    - prefer-last
+    - prefer-moving-to-variable
+    - prefer-trailing-comma
+    - tag-name
+
+linter:
+  rules:
+    prefer_const_literals_to_create_immutables: true
+    prefer_const_constructors_in_immutables: true
+    prefer_const_constructors: true
+    always_declare_return_types: true
+    avoid_bool_literals_in_conditional_expressions: true
+    avoid_classes_with_only_static_members: false
+    avoid_redundant_argument_values: true
+    avoid_slow_async_io: true
+    avoid_type_to_string: true
+    avoid_unused_constructor_parameters: true
+    avoid_void_async: true
+    cancel_subscriptions: true
+    close_sinks: true
+    depend_on_referenced_packages: true
+    directives_ordering: true
+    flutter_style_todos: false
+    library_private_types_in_public_api: true
+    no_adjacent_strings_in_list: true
+    no_logic_in_create_state: true
+    overridden_fields: true
+    prefer_asserts_in_initializer_lists: true
+    prefer_final_locals: true
+    prefer_foreach: true
+    prefer_int_literals: true
+    prefer_interpolation_to_compose_strings: true
+    prefer_relative_imports: true
+    prefer_single_quotes: true
+    public_member_api_docs: false
+    require_trailing_commas: false
+    slash_for_doc_comments: true
+    sort_child_properties_last: true
+    sort_unnamed_constructors_first: true
+    test_types_in_equals: true
+    throw_in_finally: true
+    type_annotate_public_apis: true
+    unnecessary_await_in_return: true
+    unnecessary_lambdas: false
+    unnecessary_null_aware_assignments: true
+    unnecessary_null_checks: true
+    unnecessary_parenthesis: true
+    unnecessary_raw_strings: true
+    unnecessary_statements: true
+    use_if_null_to_convert_nulls_to_bools: true
+    use_named_constants: true
+    use_super_parameters: true
+    void_checks: true
+    unnecessary_null_aware_operator_on_extension_on_nullable: true
+    unnecessary_to_list_in_spreads: true
+    use_build_context_synchronously: true
+    no_leading_underscores_for_library_prefixes: true
+    no_leading_underscores_for_local_identifiers: true
+    null_check_on_nullable_type_parameter: true
+    collection_methods_unrelated_type: true
+    combinators_ordering: true
+    implicit_call_tearoffs: false
+    no_default_cases: true
+    unnecessary_nullable_for_final_variable_declarations: true
+    use_enums: true
+    always_put_required_named_parameters_first: true
+    unnecessary_constructor_name: true
+    unnecessary_late: true
+    no_wildcard_variable_uses: true
+    matching_super_parameters: true
+    unnecessary_string_interpolations: true
+    unnecessary_string_escapes: true
+    unnecessary_null_in_if_null_operators: true
+    unnecessary_new: true
+    type_init_formals: true
+    recursive_getters: true
+    dangling_library_doc_comments: true
+    secure_pubspec_urls: true
+    type_literal_in_constant_pattern: true
+    use_string_in_part_of_directives: true
+    strict_top_level_inference: true
+    lines_longer_than_80_chars: false
+
+    prefer_final_fields: true
+    prefer_final_in_for_each: true
+#    - avoid_bool_literals_in_conditional_expressions
+#    - avoid_classes_with_only_static_members
+#    - avoid_private_typedef_functions
+#    - avoid_redundant_argument_values
+#    - avoid_returning_this
+#    - avoid_unused_constructor_parameters
+#    - avoid_void_async
+#    - cancel_subscriptions
+#    - cascade_invocations
+#    - join_return_with_assignment
+#    - literal_only_boolean_expressions
+#    - missing_whitespace_between_adjacent_strings
+#    - no_adjacent_strings_in_list
+#    - no_runtimeType_toString
+#    - prefer_const_declarations
+#    - prefer_expression_function_bodies
+#    - unnecessary_await_in_return
+#    - use_if_null_to_convert_nulls_to_bools
+#    - use_raw_strings
+#    - use_string_buffers
+#    - avoid_returning_null
+#    - invalid_case_patterns
+#    - prefer_final_locals
+#    - sort_child_properties_last
+#    - unnecessary_breaks
+#    - use_full_hex_values_for_flutter_colors
+#    - unnecessary_raw_strings
